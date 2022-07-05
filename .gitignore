@@ -1,0 +1,4 @@
+*.backup
+.idea
+node_modules
+docker/dev/data

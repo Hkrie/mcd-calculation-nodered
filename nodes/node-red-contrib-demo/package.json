@@ -1,0 +1,8 @@
+{
+  "name": "node-red-contrib-demo",
+  "node-red": {
+    "nodes": {
+      "demo": "demo.js"
+    }
+  }
+}

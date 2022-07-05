@@ -1,0 +1,25 @@
+{
+    "name": "node-red-prismapro",
+    "description": "PrismaPro Node-RED-Projekt",
+    "version": "0.0.1",
+    "dependencies": {
+        "@dreebit/prisma-pro": "link:../prisma-pro",
+        "prismapro-mcd-calculation": "link:../prismapro-mcd-calculation-ts",
+        "express": "^4.18.1",
+        "lodash": "^4.17.21",
+        "node-red": "^2.2.2",
+        "node-red-dashboard": "^3.1.7"
+    },
+    "devDependencies": {
+        "jest": "^28.1.0",
+        "nodemon": "^2.0.16"
+    },
+    "scripts": {
+        "start": "node index.js",
+        "start:watch": "nodemon index.js",
+        "test": "jest",
+        "create:manifest": "npm run create:structs && npm run create:cycles",
+        "create:structs": "node ./scripts/getStructs.js",
+        "create:cycles": "jest ./utils/parseActValues.test.js && node ./scripts/getCycles.js --manifest_path=./thales-manifest.json --excel_folder_path=./import/excel/"
+    }
+}

@@ -1,0 +1,99 @@
+<script type="text/javascript">
+    RED.nodes.registerType('doTestGasMeasurement', {
+        category: 'PrismaPro',
+        color: '#cc0033',
+        defaults: {
+            name: {value: "Do Test Gas Measurement"},
+            client: {type: "prismapro-client", required: true},
+            dwellTime: {value: "32", required: true},
+            testGasMixture: {
+                value: JSON.stringify([
+                    {
+                        "atomic_masses": [28],
+                        "symbol": 'N2',
+                    },
+                    {
+                        "atomic_masses": [32],
+                        "symbol": 'O2',
+                    },
+                    {
+                        "atomic_masses": [40],
+                        "symbol": 'Ar',
+                    },
+                    {
+                        "atomic_masses": [44],
+                        "symbol": 'CO2',
+                    },
+                    {
+                        "atomic_masses": [20],
+                        "symbol": 'Ne',
+                    },
+                    {
+                        "atomic_masses": [4],
+                        "symbol": 'He'
+                    },
+                    {
+                        "atomic_masses": [16],
+                        "symbol": 'CH4',
+                    },
+                    {
+                        "atomic_masses": [2],
+                        "symbol": 'H2',
+                    },
+                    {
+                        "atomic_masses": [84],
+                        "symbol": 'Kr',
+                    },
+                    {
+                        "atomic_masses": [18],
+                        "symbol": 'H2O',
+                    }
+                ]), required: true
+            },
+            testGasMixtureType: {value: "json"},
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "file.png",
+        label: function () {
+            return this.name || "Do TestGasMeasurement";
+        },
+        oneditprepare: function () {
+            $('#node-input-testGasMixture').typedInput({
+                default: 'json',
+                typeField: $("#node-input-testGasMixtureType"),
+                types: ['json']
+            });
+        }
+    });
+</script>
+
+<script data-template-name="doTestGasMeasurement" type="text/html">
+    <div className="form-row">
+        <label htmlFor="node-input-name"><i className="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div className="form-row">
+        <label htmlFor="node-input-client">
+            <i className="fa fa-server"></i> PrismaPro Client
+        </label>
+        <input type="text" id="node-input-client"/>
+    </div>
+
+    <h1>Testgas Messung</h1>
+    <div className="form-row">
+        <label htmlFor="node-input-dwellTime"><i className="fa fa-server"></i>Dwell time (in ms)</label>
+        <input type="text" id="node-input-dwellTime"/>
+
+
+        <label htmlFor="node-input-testGasMixture"><i className="fa fa-server"></i>Testgas
+            Zusammensetzung(Symbol-Amus)</label>
+        <input type="text" id="node-input-testGasMixture"/>
+        <input type="hidden" id="node-input-testGasMixtureType">
+    </div>
+</script>
+
+<script data-help-name="doTestGasMeasurement" type="text/html">
+    <p>A node to do testgas measurements using the prismapro</p>
+</script>
