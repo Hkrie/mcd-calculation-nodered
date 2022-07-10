@@ -74,11 +74,9 @@ module.exports = function (RED) {
                         const targetScanNumber = node.customConfig.calibrationScanRuns;
                         const intervalId = setInterval(async () => {
                             const res = await node.config.client.sendRequest("/mmsp/scanInfo/currentScan/get");
-                            const totalPressure = await node.config.client.sendRequest("/mmsp/measurement/totalPressure/get");
                             const result = await res.json();
                             const currentScanNumber = result.data;
                             if (currentScanNumber > targetScanNumber) {
-                                node.warn("stopping emission, em and scan scannumber:" + currentScanNumber)
 
                                 clearInterval(intervalId)
                                 await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
