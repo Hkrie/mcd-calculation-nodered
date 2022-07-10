@@ -42,12 +42,11 @@ module.exports = function (RED) {
                 name: "DefaultRecipe",
                 dwell: node.customConfig.dwellTime,
                 mode: "MASSES",
-                // row (channel) for measurement:
                 rows: rows
             }
 
             const prismaService = new PrismaService({
-                host: node.config.client.config.host,//"https://192.168.1.100:8080"//je nach nutzereinabe bei der ip für das prismapro verändern.
+                host: node.config.client.config.host,
                 timeout: 2500
             })
 
@@ -56,8 +55,7 @@ module.exports = function (RED) {
 
             (async () => {
                 try {
-                    const response = await recipeScanSetupTranslator.setScanSetup();
-                    node.warn(response)
+                    await recipeScanSetupTranslator.setScanSetup();
                     const all_atomic_masses = _.flatten(node.customConfig.calibrationMixture.map(obj => [...obj.atomic_masses]));
                     if (all_atomic_masses.length !== _.uniq(all_atomic_masses).length) {
                         throwError("No overlap allowed! " +
@@ -67,22 +65,17 @@ module.exports = function (RED) {
                         return
                     }
 
-
                     await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
                     await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
                     await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
                     node.warn("everything was started")
+
                     setTimeout(()=>{
                         const targetScanNumber = node.customConfig.calibrationScanRuns;
                         const intervalId = setInterval(async () => {
                             const res = await node.config.client.sendRequest("/mmsp/scanInfo/currentScan/get");
                             const totalPressure = await node.config.client.sendRequest("/mmsp/measurement/totalPressure/get");
-                            node.warn(await totalPressure.json())
-                            const totalPointsPerScan = await node.config.client.sendRequest("/mmsp/scanInfo/pointsPerScan/get");
-                            node.warn(await totalPointsPerScan.json())
-                            //todo check if key is correct (check in prismapro simulation)
                             const result = await res.json();
-                            node.warn(result)
                             const currentScanNumber = result.data;
                             if (currentScanNumber > targetScanNumber) {
                                 node.warn("stopping emission, em and scan scannumber:" + currentScanNumber)
@@ -99,13 +92,8 @@ module.exports = function (RED) {
                             }
                         }, 3000)
                     }, 2000)
-
-
-
                 } catch (e) {
                     node.warn(e);
-                    // throwError(e);
-                    // return
                 }
             })();
 
@@ -115,14 +103,13 @@ module.exports = function (RED) {
 
                 const res = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
                 const completeMeasurements = await res.json();
-                node.warn(completeMeasurements)
 
                 const substance_amus_proportions = calcProportions(recipe, calibrationMixture, completeMeasurements);
                 const partialPressures = calcPartialPressures(calibrationMixture, completeMeasurements);
                 const calibration_factors = calcCalibrationFactors(calibrationMixture, recipe, completeMeasurements, partialPressures, referenceElementSymbol);
 
                 //check if proportions etc. were already defined at least once before
-                if (payload !== {} && payload.proportions) {// todo account for using the same element in several calibrations (that's quite normal)
+                if (payload !== {} && payload.proportions) {
                     substance_amus_proportions.forEach(obj => {
                         const symbol_already_in_array = payload.proportions.filter(obj2 => obj2.symbol === obj.symbol).length;
                         if (!symbol_already_in_array) payload.proportions.push(obj)
@@ -137,9 +124,6 @@ module.exports = function (RED) {
                         const symbol_already_in_array = payload.calibrationFactors.filter(obj2 => obj2.symbol === obj.symbol && obj2.amu === obj.amu).length;
                         if (!symbol_already_in_array) payload.calibrationFactors.push(obj)
                     })
-                    // msg.payload.proportions.push(...substance_amus_proportions)
-                    // msg.payload.partialPressures.push(...partialPressures)
-                    // msg.payload.calibrationFactors.push(...calibration_factors)
                 } else {
                     payload = {
                         proportions: substance_amus_proportions,
@@ -147,7 +131,6 @@ module.exports = function (RED) {
                         calibrationFactors: calibration_factors
                     }
                 }
-
                 return payload;
             }
 

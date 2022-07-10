@@ -21,7 +21,6 @@ module.exports = function (RED) {
             const testGasMixture = node.customConfig.testGasMixture;
             const payload = JSON.parse(msg.payload);
 
-            // node.warn(payload)
             const rows = _.uniq(
                 _.flatten(testGasMixture
                     .map(obj => {
@@ -42,24 +41,21 @@ module.exports = function (RED) {
                 name: "DefaultRecipe",
                 dwell: node.customConfig.dwellTime,
                 mode: "MASSES",
-                // row (channel) for measurement:
                 rows: rows
             }
 
             const proportions = payload.proportions;
             const calibrationFactors = payload.calibrationFactors;
 
-            // node.warn(testGasMixture.map(obj=> obj.atomic_masses))
-
             const prismaService = new PrismaService({
-                host: node.config.client.config.host,//"https://192.168.1.100:8080"//je nach nutzereinabe bei der ip für das prismapro verändern.
+                host: node.config.client.config.host,
                 timeout: 2500
             })
             const recipeScanSetupTranslator = new RecipeScanSetupTranslator(recipe, prismaService, null);
 
             (async () => {
                     try {
-                        const response = await recipeScanSetupTranslator.setScanSetup();
+                        await recipeScanSetupTranslator.setScanSetup();
 
                         await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
                         await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
@@ -70,7 +66,7 @@ module.exports = function (RED) {
                         const intervalId = setInterval(async () => {// check for finished calibration measurement
                             const measurement_response = await node.config.client.sendRequest("/mmsp/measurement/scans/-1/get");
                             const lastCompleteMeasurement = await measurement_response.json();
-                            // node.warn(lastCompleteMeasurement)
+
                             if (lastScanNumber < lastCompleteMeasurement.data.scannum) {
                                 lastScanNumber = lastCompleteMeasurement.data.scannum;
 
@@ -78,14 +74,7 @@ module.exports = function (RED) {
                                 const concentrations = await calcConcentrations(testGasMixture, calibrationFactors, resolved_ion_currents);
                                 msg.payload = {};
                                 msg.payload.concentrations = concentrations;
-                                // if(!msg.payload.allMeasuredConcentrations){
-                                //     msg.payload.allMeasuredConcentrations = [];
-                                // }
-                                // msg.payload.allMeasuredConcentrations.push({
-                                //     timestamp: +new Date(),
-                                //     concentrations
-                                // })
-                                node.warn(msg.payload)
+
                                 node.send(msg);
                             }
                         }, 3000);
