@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "dependencies": {
         "@dreebit/prisma-pro": "link:../prisma-pro",
-        "prismapro-mcd-calculation": "link:../prismapro-mcd-calculation-ts",
+        "prismapro-mcd-calculation": "link:../mcd-calculation",
         "express": "^4.18.1",
         "lodash": "^4.17.21",
         "node-red": "^2.2.2",

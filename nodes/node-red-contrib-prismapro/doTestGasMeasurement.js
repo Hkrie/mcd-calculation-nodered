@@ -1,5 +1,5 @@
-const {calcConcentrations} = require("../../../prismapro-mcd-calculation-ts");
-const {resolveIonCurrents} = require("../../../prismapro-mcd-calculation-ts");
+const {calcConcentrations} = require("../../../mcd-calculation");
+const {resolveIonCurrents} = require("../../../mcd-calculation");
 const {RecipeScanSetupTranslator} = require("../../../prisma-pro");
 const {PrismaService} = require("../../../prisma-pro");
 const {_} = require("lodash");
