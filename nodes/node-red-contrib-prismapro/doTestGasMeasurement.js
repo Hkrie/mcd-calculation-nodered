@@ -1,3 +1,4 @@
+const {calcCalibrationFactors} = require("../../../mcd-calculation");
 const {calcConcentrations} = require("../../../mcd-calculation");
 const {resolveIonCurrents} = require("../../../mcd-calculation");
 const {RecipeScanSetupTranslator} = require("../../../prisma-pro");
@@ -44,8 +45,10 @@ module.exports = function (RED) {
                 rows: rows
             }
 
+            const referenceElementSymbol = node.customConfig.referenceElementSymbol;
             const proportions = payload.proportions;
-            const calibrationFactors = payload.calibrationFactors;
+            const sensitivities = payload.sensitivities;
+            const calibrationFactors = calcCalibrationFactors(sensitivities, referenceElementSymbol);
 
             const prismaService = new PrismaService({
                 host: node.config.client.config.host,
@@ -69,6 +72,7 @@ module.exports = function (RED) {
 
                             if (lastScanNumber < lastCompleteMeasurement.data.scannum) {
                                 lastScanNumber = lastCompleteMeasurement.data.scannum;
+
 
                                 const resolved_ion_currents = await resolveIonCurrents(proportions, lastCompleteMeasurement, testGasMixture, recipe);
                                 const concentrations = await calcConcentrations(testGasMixture, calibrationFactors, resolved_ion_currents);

@@ -50,6 +50,7 @@
                     }
                 ]), required: true
             },
+            referenceElement: {value: "N2", required: true},
             testGasMixtureType: {value: "json"},
         },
         inputs: 1,
@@ -86,6 +87,8 @@
         <label htmlFor="node-input-dwellTime"><i className="fa fa-server"></i>Dwell time (in ms)</label>
         <input type="text" id="node-input-dwellTime"/>
 
+        <label htmlFor="node-input-referenceElement"><i className="fa fa-server"></i>Referenzelement (Symbol)</label>
+        <input type="text" id="node-input-referenceElement"/>
 
         <label htmlFor="node-input-testGasMixture"><i className="fa fa-server"></i>Testgas
             Zusammensetzung(Symbol-Amus)</label>

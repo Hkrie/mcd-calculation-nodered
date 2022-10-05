@@ -1,4 +1,4 @@
-const {calcProportions, calcCalibrationFactors, calcPartialPressures} = require("../../../prisma-pro");
+const {calcProportions, calcSensitivities, calcPartialPressures} = require("../../../prisma-pro");
 const {RecipeScanSetupTranslator} = require("../../../prisma-pro");
 const {PrismaService} = require("../../../prisma-pro");
 const {_} = require("lodash");
@@ -97,14 +97,13 @@ module.exports = function (RED) {
 
             async function evaluateMeasurement() {
                 const calibrationMixture = node.customConfig.calibrationMixture;
-                const referenceElementSymbol = node.customConfig.referenceElementSymbol;
 
                 const res = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
                 const completeMeasurements = await res.json();
 
                 const substance_amus_proportions = calcProportions(recipe, calibrationMixture, completeMeasurements);
                 const partialPressures = calcPartialPressures(calibrationMixture, completeMeasurements);
-                const calibration_factors = calcCalibrationFactors(calibrationMixture, recipe, completeMeasurements, partialPressures, referenceElementSymbol);
+                const sensitivities = calcSensitivities(calibrationMixture, recipe, completeMeasurements, partialPressures);
 
                 //check if proportions etc. were already defined at least once before
                 if (payload !== {} && payload.proportions) {
@@ -118,15 +117,15 @@ module.exports = function (RED) {
                         if (!symbol_already_in_array) payload.partialPressures.push(obj)
                     })
 
-                    calibration_factors.forEach(obj => {
-                        const symbol_already_in_array = payload.calibrationFactors.filter(obj2 => obj2.symbol === obj.symbol && obj2.amu === obj.amu).length;
-                        if (!symbol_already_in_array) payload.calibrationFactors.push(obj)
+                    sensitivities.forEach(obj => {
+                        const symbol_already_in_array = payload.sensitivities.filter(obj2 => obj2.symbol === obj.symbol && obj2.amu === obj.amu).length;
+                        if (!symbol_already_in_array) payload.sensitivities.push(obj)
                     })
                 } else {
                     payload = {
                         proportions: substance_amus_proportions,
                         partialPressures: partialPressures,
-                        calibrationFactors: calibration_factors
+                        sensitivities: sensitivities
                     }
                 }
                 return payload;
