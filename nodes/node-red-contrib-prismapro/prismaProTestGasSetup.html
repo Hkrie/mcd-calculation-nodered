@@ -4,7 +4,7 @@
         color: '#cc0033',
         defaults: {
             name: {value: "Test Gas Setup"},
-            client: {type: "prismapro-client", required: true},
+            // client: {type: "prismapro-client", required: true},
             dwellTime: {value: "32", required: true},
             testGasMixture: {
                 value: JSON.stringify([
@@ -69,7 +69,7 @@
     });
 </script>
 
-<script data-template-name="doTestGasMeasurement" type="text/html">
+<script data-template-name="prismaProTestGasSetup" type="text/html">
     <div className="form-row">
         <label htmlFor="node-input-name"><i className="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">

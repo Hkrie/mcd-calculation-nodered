@@ -5,7 +5,7 @@ const {_} = require("lodash");
 
 module.exports = function (RED) {
     var ClientNode = require("./client");
-    RED.nodes.registerType("prismapro-client", ClientNode(RED), {});
+    RED.nodes.registerType("prismapro-testgas-client", ClientNode(RED), {});
 
     function PrismaProTestGasClientNode(config) {
         RED.nodes.createNode(this, config);
@@ -68,5 +68,5 @@ module.exports = function (RED) {
     }
 
 
-    RED.nodes.registerType("prismaProTestGasClientNode", PrismaProTestGasClientNode);
+    RED.nodes.registerType("prismaProTestGasClient", PrismaProTestGasClientNode);
 }

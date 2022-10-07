@@ -59,5 +59,5 @@ module.exports = function (RED) {
     }
 
 
-    RED.nodes.registerType("prismaProClientNode", PrismaProClientNode);
+    RED.nodes.registerType("prismaProClient", PrismaProClientNode);
 }

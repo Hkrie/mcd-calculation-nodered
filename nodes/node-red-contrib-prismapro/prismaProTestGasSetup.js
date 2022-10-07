@@ -1,7 +1,4 @@
 module.exports = function (RED) {
-    var ClientNode = require("./client");
-    RED.nodes.registerType("prismapro-client", ClientNode(RED), {});
-
     function PrismaProTestGasSetupNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;

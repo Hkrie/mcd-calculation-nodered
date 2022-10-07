@@ -9,7 +9,9 @@
       "prismaProCalibrationSetup": "prismaProCalibrationSetup.js",
       "prismaProClient" : "prismaProClient.js",
       "doCalibrationMeasurement": "doCalibrationMeasurement.js",
-      "doTestGasMeasurement": "doTestGasMeasurement.js"
+      "doTestGasMeasurement": "doTestGasMeasurement.js",
+      "prismaProTestGasSetup": "prismaProTestGasSetup",
+      "prismaProTestGasClient": "prismaProTestGasClient"
     }
   }
 }
