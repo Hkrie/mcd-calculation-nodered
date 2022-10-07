@@ -30,7 +30,7 @@ npm manifest:
     "node-red": {
       "nodes": {
         "startScan": "startScan.js",
-        "prismaProSetup": "prismaProSetup.js",
+        "prismaProSetup": "prismaProCalibrationSetup.js",
         "doCalibrationMeasurement": "doCalibrationMeasurement.js",
         "doTestGasMeasurement": "doTestGasMeasurement.js"
       }

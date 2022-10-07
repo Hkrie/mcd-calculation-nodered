@@ -436,11 +436,23 @@
                 "module": "node-red",
                 "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\doTestGasMeasurement.js"
             },
+            "prismaProClient": {
+                "name": "prismaProClient",
+                "types": [
+                    "prismapro-client",
+                    "prismaProClientNode"
+                ],
+                "enabled": true,
+                "local": false,
+                "user": false,
+                "module": "node-red",
+                "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\prismaProClient.js"
+            },
             "prismaProSetup": {
                 "name": "prismaProSetup",
                 "types": [
-                    "prismapro-client",
-                    "prismaProSetup"
+                    "prismaProSetup",
+                    "prismapro-client"
                 ],
                 "enabled": true,
                 "local": false,

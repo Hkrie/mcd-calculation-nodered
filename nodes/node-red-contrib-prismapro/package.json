@@ -6,7 +6,8 @@
   "node-red": {
     "nodes": {
       "startScan": "startScan.js",
-      "prismaProSetup": "prismaProSetup.js",
+      "prismaProCalibrationSetup": "prismaProCalibrationSetup.js",
+      "prismaProClient" : "prismaProClient.js",
       "doCalibrationMeasurement": "doCalibrationMeasurement.js",
       "doTestGasMeasurement": "doTestGasMeasurement.js"
     }
