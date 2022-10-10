@@ -19,8 +19,13 @@ module.exports = function (RED) {
                 dwellTime: config.dwellTime,
                 referenceElementSymbol: config.referenceElement,
                 testGasMixture,
-                recipe
+                recipe,
+                calibrationResult: {
+                    proportions: msg.payload.proportions,
+                    sensitivities: msg.payload.sensitivities
+                }
             }
+            msg.payload = {};
 
             try {
                 node.send(msg)

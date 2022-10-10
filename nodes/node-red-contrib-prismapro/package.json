@@ -8,10 +8,11 @@
       "startScan": "startScan.js",
       "prismaProCalibrationSetup": "prismaProCalibrationSetup.js",
       "prismaProTestGasSetup": "prismaProTestGasSetup",
-      "prismaProClient" : "prismaProClient.js",
+      "prismaProCalibrationClient" : "prismaProCalibrationClient.js",
       "prismaProTestGasClient": "prismaProTestGasClient",
       "doCalibrationMeasurement": "doCalibrationMeasurement.js",
-      "doTestGasMeasurement": "doTestGasMeasurement.js"
+      "doTestGasMeasurement": "doTestGasMeasurement.js",
+      "saveCalibrationResult": "saveCalibrationResult"
     }
   }
 }

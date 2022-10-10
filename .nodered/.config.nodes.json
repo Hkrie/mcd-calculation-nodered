@@ -436,6 +436,18 @@
                 "module": "node-red",
                 "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\doTestGasMeasurement.js"
             },
+            "prismaProCalibrationClient": {
+                "name": "prismaProCalibrationClient",
+                "types": [
+                    "prismaProCalibrationClient",
+                    "prismapro-client"
+                ],
+                "enabled": true,
+                "local": false,
+                "user": false,
+                "module": "node-red",
+                "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\prismaProCalibrationClient.js"
+            },
             "prismaProCalibrationSetup": {
                 "name": "prismaProCalibrationSetup",
                 "types": [
@@ -446,18 +458,6 @@
                 "user": false,
                 "module": "node-red",
                 "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\prismaProCalibrationSetup.js"
-            },
-            "prismaProClient": {
-                "name": "prismaProClient",
-                "types": [
-                    "prismaProClient",
-                    "prismapro-client"
-                ],
-                "enabled": true,
-                "local": false,
-                "user": false,
-                "module": "node-red",
-                "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\prismaProClient.js"
             },
             "prismaProTestGasClient": {
                 "name": "prismaProTestGasClient",
@@ -481,6 +481,17 @@
                 "user": false,
                 "module": "node-red",
                 "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\prismaProTestGasSetup.js"
+            },
+            "saveCalibrationResult": {
+                "name": "saveCalibrationResult",
+                "types": [
+                    "saveCalibrationResult"
+                ],
+                "enabled": true,
+                "local": false,
+                "user": false,
+                "module": "node-red",
+                "file": "C:\\Users\\KriebischH\\Documents\\BA Dresden\\bachelorarbeit\\Bachelorarbeit-Module\\mcd-calculation-nodered\\nodes\\node-red-contrib-prismapro\\saveCalibrationResult.js"
             },
             "startScan": {
                 "name": "startScan",

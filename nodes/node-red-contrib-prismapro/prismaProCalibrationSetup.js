@@ -1,4 +1,6 @@
 module.exports = function (RED) {
+
+
     function PrismaProCalibrationSetupNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
@@ -15,7 +17,7 @@ module.exports = function (RED) {
                 rows: rows
             }
 
-            msg.measurementConfig = {
+            msg.calibrationConfig = {
                 dwellTime: config.dwellTime,
                 calibrationScanRuns: config.calibrationScanRuns,
                 calibrationMixture,

@@ -20,9 +20,9 @@ module.exports = function (RED) {
             const recipe = msg.measurementConfig.recipe;
             const referenceElementSymbol = msg.measurementConfig.referenceElementSymbol;
 
-            const payload = JSON.parse(msg.payload);
-            const proportions = payload.proportions;
-            const sensitivities = payload.sensitivities;
+            const proportions = msg.measurementConfig.calibrationResult.proportions;
+            const sensitivities = msg.measurementConfig.calibrationResult.sensitivities;
+
             const lastCompleteMeasurement = msg.lastMeasurementResult;
 
             const calibrationFactors = calcCalibrationFactors(sensitivities, referenceElementSymbol);

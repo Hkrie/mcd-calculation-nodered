@@ -7,7 +7,7 @@ module.exports = function (RED) {
     var ClientNode = require("./client");
     RED.nodes.registerType("prismapro-client", ClientNode(RED), {});
 
-    function PrismaProClientNode(config) {
+    function PrismaProCalibrationClientNode(config) {
         RED.nodes.createNode(this, config);
         const client = RED.nodes.getNode(config.client);
         const node = this;
@@ -59,5 +59,5 @@ module.exports = function (RED) {
     }
 
 
-    RED.nodes.registerType("prismaProClient", PrismaProClientNode);
+    RED.nodes.registerType("prismaProCalibrationClient", PrismaProCalibrationClientNode);
 }
