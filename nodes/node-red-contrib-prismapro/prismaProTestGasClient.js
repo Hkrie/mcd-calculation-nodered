@@ -9,20 +9,27 @@ module.exports = function (RED) {
 
     function PrismaProTestGasClientNode(config) {
         RED.nodes.createNode(this, config);
-        const client = RED.nodes.getNode(config.client);
         const node = this;
-        node.config = {
-            client
+        if (config.client) {
+            createClient(config.client)
         }
 
         node.on('input', function (msg) {
+            if (!config.client) {
+                try {
+                    createClient(msg.testgasMeasurement.config.client)
+                } catch (e) {
+                    throw e
+                }
+            }
+
             const prismaService = new PrismaService({
                 host: node.config.client.config.host,
                 timeout: 2500
             })
 
 
-            const recipeScanSetupTranslator = new RecipeScanSetupTranslator(msg.measurementConfig.recipe, prismaService, null);
+            const recipeScanSetupTranslator = new RecipeScanSetupTranslator(msg.testgasMeasurement.config.recipe, prismaService, null);
 
             (async () => {
                 try {
@@ -39,34 +46,30 @@ module.exports = function (RED) {
                     await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
                     await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
 
-                    const countOfAmuMeasured = msg.measurementConfig.recipe.rows.length;
-                    const timeoutTime = msg.measurementConfig.dwellTime * countOfAmuMeasured;
+                    const countOfAmuMeasured = msg.testgasMeasurement.config.recipe.rows.length;
+                    const timeoutTime = msg.testgasMeasurement.config.dwellTime * countOfAmuMeasured;
 
                     const intervalId = setInterval(async () => {
-                        const result = await node.config.client.sendRequest("/mmsp/scanInfo/currentScan/get").json();
-                        const currentScanNumber = result.data;
-                        node.warn(currentScanNumber);
-                        if (currentScanNumber > targetScanNumber) {
-                            clearInterval(intervalId)
+                        const lastMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/-1/get");
+                        msg.testgasMeasurement.result.lastMeasurement = await lastMeasurementResult.json();
 
-                            const lastMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/-1/get");
-                            msg.lastMeasurementResult = await lastMeasurementResult.json();
-
-                            const completeMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
-                            msg.completeMeasuredScanData = await completeMeasurementResult.json();
-                            node.send(msg)
-
-
-                        }
+                        // const completeMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
+                        // msg.testgasMeasurement.result.allMeasurements = await completeMeasurementResult.json();
+                        node.send(msg)
                     }, timeoutTime)
-
                 } catch (e) {
                     node.warn(e);
                 }
             })();
         });
-    }
 
+        function createClient(clientConfig) {
+            const client = RED.nodes.getNode(clientConfig);
+            node.config = {
+                client
+            }
+        }
+    }
 
     RED.nodes.registerType("prismaProTestGasClient", PrismaProTestGasClientNode);
 }

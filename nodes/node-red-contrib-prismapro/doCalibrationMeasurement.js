@@ -6,17 +6,17 @@ module.exports = function (RED) {
         var node = this;
 
         node.on('input', function (msg) {
-            const calibrationMixture = node.measurementConfig.calibrationMixture;
-            const recipe = msg.measurementConfig.recipe;
-            const completeMeasurements = msg.measuredScanData;
+            const calibrationMixture = node.calibrationMeasurement.config.calibrationMixture;
+            const recipe = msg.calibrationMeasurement.config.recipe;
+            const completeMeasurements = msg.calibrationMeasurement.measuredScanData;
 
             const substance_amus_proportions = calcProportions(recipe, calibrationMixture, completeMeasurements);
             const partialPressures = calcPartialPressures(calibrationMixture, completeMeasurements);
             const sensitivities = calcSensitivities(calibrationMixture, recipe, completeMeasurements, partialPressures);
 
-            msg.calibrationRun = {};
-            msg.calibrationRun.proportions = substance_amus_proportions;
-            msg.calibrationRun.sensitivities = sensitivities;
+            msg.calibrationMeasurement.result = {};
+            msg.calibrationMeasurement.result.proportions = substance_amus_proportions;
+            msg.calibrationMeasurement.result.sensitivities = sensitivities;
 
             try {
                 node.send(msg)

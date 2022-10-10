@@ -9,19 +9,27 @@ module.exports = function (RED) {
 
     function PrismaProCalibrationClientNode(config) {
         RED.nodes.createNode(this, config);
-        const client = RED.nodes.getNode(config.client);
         const node = this;
-        node.config = {
-            client
+
+        if(config.client){
+            createClient(config.client)
         }
 
         node.on('input', function (msg) {
+            if(!config.client){
+                try{
+                    createClient(msg.calibrationMeasurement.config.client)
+                }catch (e) {
+                    throw e
+                }
+            }
+
             const prismaService = new PrismaService({
                 host: node.config.client.config.host,
                 timeout: 2500
             })
 
-            const recipeScanSetupTranslator = new RecipeScanSetupTranslator(msg.measurementConfig.recipe, prismaService, null);
+            const recipeScanSetupTranslator = new RecipeScanSetupTranslator(msg.calibrationMeasurement.config.recipe, prismaService, null);
 
             (async () => {
                 try {
@@ -31,10 +39,10 @@ module.exports = function (RED) {
                     await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
                     await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
 
-                    const countOfAmuMeasured = msg.measurementConfig.recipe.rows.length;
-                    const timeoutTime = msg.measurementConfig.dwellTime * countOfAmuMeasured;
+                    const countOfAmuMeasured = msg.calibrationMeasurement.config.recipe.rows.length;
+                    const timeoutTime = msg.calibrationMeasurement.config.dwellTime * countOfAmuMeasured;
 
-                    const targetScanNumber = msg.measurementConfig.calibrationScanRuns;
+                    const targetScanNumber = msg.calibrationMeasurement.config.calibrationScanRuns;
                     const intervalId = setInterval(async () => {
                         const result = await node.config.client.sendRequest("/mmsp/scanInfo/currentScan/get").json();
                         const currentScanNumber = result.data;
@@ -43,7 +51,7 @@ module.exports = function (RED) {
                             clearInterval(intervalId)
 
                             const completeMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
-                            msg.measuredScanData = await completeMeasurementResult.json();
+                            msg.calibrationMeasurement.measuredScanData = await completeMeasurementResult.json();
                             node.send(msg)
 
                             await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
@@ -56,6 +64,13 @@ module.exports = function (RED) {
                 }
             })();
         });
+
+        function createClient(clientConfig){
+            const client = RED.nodes.getNode(clientConfig);
+            node.config = {
+                client
+            }
+        }
     }
 
 

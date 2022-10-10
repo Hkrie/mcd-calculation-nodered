@@ -6,23 +6,26 @@ module.exports = function (RED) {
         const testGasMixture = JSON.parse(config.testGasMixture);
 
         node.on('input', function (msg) {
-            const rows = createRecipeRows(testGasMixture);
+            if (!msg.testgasMeasurement && !msg.testgasMeasurement.config) {
+                msg.testgasMeasurement = {};
+                const rows = createRecipeRows(testGasMixture);
 
-            const recipe = {
-                name: "DefaultRecipe",
-                dwell: config.dwellTime,
-                mode: "MASSES",
-                rows: rows
-            }
+                const recipe = {
+                    name: "DefaultRecipe",
+                    dwell: config.dwellTime,
+                    mode: "MASSES",
+                    rows: rows
+                }
 
-            msg.measurementConfig = {
-                dwellTime: config.dwellTime,
-                referenceElementSymbol: config.referenceElement,
-                testGasMixture,
-                recipe,
-                calibrationResult: {
-                    proportions: msg.payload.proportions,
-                    sensitivities: msg.payload.sensitivities
+                msg.testgasMeasurement.config = {
+                    dwellTime: config.dwellTime,
+                    referenceElementSymbol: config.referenceElement,
+                    testGasMixture,
+                    recipe,
+                    calibrationResult: {
+                        proportions: msg.payload.proportions,
+                        sensitivities: msg.payload.sensitivities
+                    }
                 }
             }
             msg.payload = {};
