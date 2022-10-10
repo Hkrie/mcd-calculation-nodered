@@ -1,11 +1,14 @@
 <script type="text/javascript">
     RED.nodes.registerType("prismaProClient", {
-        category: "config",
+        category: "PrismaPro",
+        color: '#cc0033',
         defaults: {
             name: {value: ""},
             host: {value: ""},
             simulation: {value: false}
         },
+        inputs: 1,
+        outputs: 1,
         label: function () {
             return this.name || `${this.host}`;
         }

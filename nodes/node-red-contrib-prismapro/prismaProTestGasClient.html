@@ -1,18 +1,21 @@
 <script type="text/javascript">
     RED.nodes.registerType("prismaProTestGasClient", {
-        category: "config",
+        category: "PrismaPro",
+        color: '#cc0033',
         defaults: {
             name: {value: ""},
             host: {value: ""},
             simulation: {value: false}
         },
+        inputs: 1,
+        outputs: 1,
         label: function () {
             return this.name || `${this.host}`;
         }
     });
 </script>
 
-<script type="text/html" data-template-name="prismapro-testgas-client">
+<script type="text/html" data-template-name="prismaProTestGasClient">
     <div className="form-row">
         <label htmlFor="node-config-input-name"><i className="fa fa-tag"></i> Name</label>
         <input type="text" id="node-config-input-name"/>

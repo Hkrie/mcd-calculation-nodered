@@ -7,11 +7,11 @@
     "nodes": {
       "startScan": "startScan.js",
       "prismaProCalibrationSetup": "prismaProCalibrationSetup.js",
-      "prismaProClient" : "prismaProClient.js",
-      "doCalibrationMeasurement": "doCalibrationMeasurement.js",
-      "doTestGasMeasurement": "doTestGasMeasurement.js",
       "prismaProTestGasSetup": "prismaProTestGasSetup",
-      "prismaProTestGasClient": "prismaProTestGasClient"
+      "prismaProClient" : "prismaProClient.js",
+      "prismaProTestGasClient": "prismaProTestGasClient",
+      "doCalibrationMeasurement": "doCalibrationMeasurement.js",
+      "doTestGasMeasurement": "doTestGasMeasurement.js"
     }
   }
 }

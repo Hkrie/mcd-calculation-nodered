@@ -462,8 +462,8 @@
             "prismaProTestGasClient": {
                 "name": "prismaProTestGasClient",
                 "types": [
-                    "prismapro-testgas-client",
-                    "prismaProTestGasClient"
+                    "prismaProTestGasClient",
+                    "prismapro-testgas-client"
                 ],
                 "enabled": true,
                 "local": false,
