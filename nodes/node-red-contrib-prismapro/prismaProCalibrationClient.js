@@ -11,15 +11,15 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        if(config.client){
+        if (config.client) {
             createClient(config.client)
         }
 
         node.on('input', function (msg) {
-            if(!config.client){
-                try{
+            if (!config.client) {
+                try {
                     createClient(msg.calibrationMeasurement.config.client)
-                }catch (e) {
+                } catch (e) {
                     throw e
                 }
             }
@@ -33,11 +33,12 @@ module.exports = function (RED) {
 
             (async () => {
                 try {
-                    await recipeScanSetupTranslator.setScanSetup();
+                    if (msg.payload === "stopMeasurement") {
+                        stopMeasurement()
+                        return
+                    }
 
-                    await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
-                    await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
-                    await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
+                    startMeasurement(recipeScanSetupTranslator);
 
                     const countOfAmuMeasured = msg.calibrationMeasurement.config.recipe.rows.length;
                     const timeoutTime = msg.calibrationMeasurement.config.dwellTime * countOfAmuMeasured;
@@ -54,9 +55,7 @@ module.exports = function (RED) {
                             msg.calibrationMeasurement.measuredScanData = await completeMeasurementResult.json();
                             node.send(msg)
 
-                            await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
-                            await node.config.client.sendRequest("/mmsp/generalControl/setEM/set?Off")
-                            await node.config.client.sendRequest("/mmsp/scanSetup/scanStop/set?1")
+                            stopMeasurement()
                         }
                     }, timeoutTime)
                 } catch (e) {
@@ -65,11 +64,25 @@ module.exports = function (RED) {
             })();
         });
 
-        function createClient(clientConfig){
+        function createClient(clientConfig) {
             const client = RED.nodes.getNode(clientConfig);
             node.config = {
                 client
             }
+        }
+
+        async function stopMeasurement() {
+            await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
+            await node.config.client.sendRequest("/mmsp/generalControl/setEM/set?Off")
+            await node.config.client.sendRequest("/mmsp/scanSetup/scanStop/set?1")
+        }
+
+        async function startMeasurement(recipeScanSetupTranslator) {
+            await recipeScanSetupTranslator.setScanSetup();
+
+            await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
+            await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
+            await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
         }
     }
 

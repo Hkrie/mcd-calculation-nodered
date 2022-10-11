@@ -34,22 +34,16 @@ module.exports = function (RED) {
             (async () => {
                 try {
                     if (msg.payload === "stopMeasurement") {
-                        await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
-                        await node.config.client.sendRequest("/mmsp/generalControl/setEM/set?Off")
-                        await node.config.client.sendRequest("/mmsp/scanSetup/scanStop/set?1")
+                        stopMeasurement()
                         return
                     }
 
-                    await recipeScanSetupTranslator.setScanSetup();
-
-                    await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
-                    await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
-                    await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
+                    startMeasurement(recipeScanSetupTranslator)
 
                     const countOfAmuMeasured = msg.testgasMeasurement.config.recipe.rows.length;
                     const timeoutTime = msg.testgasMeasurement.config.dwellTime * countOfAmuMeasured;
 
-                    const intervalId = setInterval(async () => {
+                    setInterval(async () => {
                         const lastMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/-1/get");
                         msg.testgasMeasurement.result.lastMeasurement = await lastMeasurementResult.json();
 
@@ -68,6 +62,20 @@ module.exports = function (RED) {
             node.config = {
                 client
             }
+        }
+
+        async function stopMeasurement() {
+            await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
+            await node.config.client.sendRequest("/mmsp/generalControl/setEM/set?Off")
+            await node.config.client.sendRequest("/mmsp/scanSetup/scanStop/set?1")
+        }
+
+        async function startMeasurement(recipeScanSetupTranslator) {
+            await recipeScanSetupTranslator.setScanSetup();
+
+            await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
+            await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
+            await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
         }
     }
 
