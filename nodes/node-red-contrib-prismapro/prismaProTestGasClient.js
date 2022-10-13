@@ -25,7 +25,7 @@ module.exports = function (RED) {
             }
 
             const prismaService = new PrismaService({
-                host: node.config.client.host,
+                host: node.config.client.config.host,
                 timeout: 2500
             })
 
@@ -48,11 +48,10 @@ module.exports = function (RED) {
                     setInterval(async () => {
                         const lastMeasurementResult = await getLastCompleteMeasurement();
                         msg.testgasMeasurement.result.lastMeasurement = await lastMeasurementResult.json();
-
                         // const completeMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
                         // msg.testgasMeasurement.result.allMeasurements = await completeMeasurementResult.json();
                         node.send(msg)
-                    }, timeoutTime)
+                    }, 3000)
                 } catch (e) {
                     node.warn(e);
                 }
@@ -73,7 +72,7 @@ module.exports = function (RED) {
         }
 
         async function startMeasurement(recipeScanSetupTranslator) {
-            await recipeScanSetupTranslator.setScanSetup();
+            const recipeResponse = await recipeScanSetupTranslator.setScanSetup();
             node.warn(await recipeResponse)
 
             await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");

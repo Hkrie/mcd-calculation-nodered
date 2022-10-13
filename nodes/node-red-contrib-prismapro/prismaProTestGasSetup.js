@@ -19,14 +19,16 @@ module.exports = function (RED) {
                     rows: rows
                 }
 
-                msg.testgasMeasurement.config = {
+                const calibrationResult = JSON.parse(msg.payload);
+
+                    msg.testgasMeasurement.config = {
                     dwellTime: config.dwellTime,
                     referenceElementSymbol: config.referenceElement,
                     testGasMixture,
                     recipe,
                     calibrationResult: {
-                        proportions: msg.payload.proportions,
-                        sensitivities: msg.payload.sensitivities
+                        proportions: calibrationResult.proportions,
+                        sensitivities: calibrationResult.sensitivities
                     }
                 }
             }

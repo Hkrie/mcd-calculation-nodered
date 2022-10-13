@@ -58,7 +58,7 @@ module.exports = function (RED) {
                             clearInterval(intervalId)
                             stopMeasurement()
                         }
-                    }, timeoutTime)
+                    }, 2000)
                 } catch (e) {
                     node.warn(e);
                 }
