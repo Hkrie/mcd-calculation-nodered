@@ -439,8 +439,8 @@
             "prismaProCalibrationClient": {
                 "name": "prismaProCalibrationClient",
                 "types": [
-                    "prismaProCalibrationClient",
-                    "prismapro-client"
+                    "prismapro-client",
+                    "prismaProCalibrationClient"
                 ],
                 "enabled": true,
                 "local": false,
@@ -462,8 +462,8 @@
             "prismaProTestGasClient": {
                 "name": "prismaProTestGasClient",
                 "types": [
-                    "prismaProTestGasClient",
-                    "prismapro-testgas-client"
+                    "prismapro-testgas-client",
+                    "prismaProTestGasClient"
                 ],
                 "enabled": true,
                 "local": false,

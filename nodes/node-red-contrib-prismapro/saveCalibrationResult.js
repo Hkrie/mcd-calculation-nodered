@@ -6,7 +6,7 @@ module.exports = function (RED) {
         var node = this;
 
         node.on('input', async function (msg) {
-            const filePath = msg.calibrationMeasurement.config.filePath ||  config.file;
+            const filePath = msg.calibrationMeasurement.config.filePath || config.file;
 
             const proportions = msg.calibrationMeasurement.result.proportions;
             const sensitivities = msg.calibrationMeasurement.result.sensitivities;
@@ -41,18 +41,19 @@ module.exports = function (RED) {
                 }
             }
 
-            fs.writeFileSync(config.file, JSON.stringify(savedCalibrationData), "utf-8")
+            fs.writeFileSync(filePath, JSON.stringify(savedCalibrationData), 'utf8')
 
             try {
-                msg.payload = "Calibration Measurement completed and data saved to " + path
+                msg.payload = "Calibration Measurement completed and data saved to " + filePath
                 node.send(msg)
             } catch (e) {
                 node.warn(e)
             }
 
         });
+
         async function getFileContent(path) {
-            return fs.readFile(path, 'utf8');
+            return fs.readFile(path);
         }
     }
 

@@ -6,7 +6,7 @@ module.exports = function (RED) {
         var node = this;
 
         node.on('input', function (msg) {
-            const calibrationMixture = node.calibrationMeasurement.config.calibrationMixture;
+            const calibrationMixture = msg.calibrationMeasurement.config.calibrationMixture;
             const recipe = msg.calibrationMeasurement.config.recipe;
             const completeMeasurements = msg.calibrationMeasurement.measuredScanData;
 

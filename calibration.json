@@ -1,0 +1,86 @@
+{
+  "proportions": [
+    {
+      "symbol": "He",
+      "amu_proportions": {
+        "amus": [
+          4
+        ],
+        "proportions": [
+          1
+        ]
+      }
+    },
+    {
+      "symbol": "N",
+      "amu_proportions": {
+        "amus": [
+          28
+        ],
+        "proportions": [
+          1
+        ]
+      }
+    },
+    {
+      "symbol": "Ar",
+      "amu_proportions": {
+        "amus": [
+          40
+        ],
+        "proportions": [
+          1
+        ]
+      }
+    },
+    {
+      "symbol": "Kr",
+      "amu_proportions": {
+        "amus": [
+          84
+        ],
+        "proportions": [
+          1
+        ]
+      }
+    },
+    {
+      "symbol": "Xe",
+      "amu_proportions": {
+        "amus": [
+          132
+        ],
+        "proportions": [
+          1
+        ]
+      }
+    }
+  ],
+  "sensitivities": [
+    {
+      "symbol": "He",
+      "amu": 4,
+      "sensitivity": 1.664230506976762e-8
+    },
+    {
+      "symbol": "N",
+      "amu": 28,
+      "sensitivity": 0.0000019989150350920344
+    },
+    {
+      "symbol": "Ar",
+      "amu": 40,
+      "sensitivity": 2.8988174323613915e-7
+    },
+    {
+      "symbol": "Kr",
+      "amu": 84,
+      "sensitivity": 2.4366256154495217e-7
+    },
+    {
+      "symbol": "Xe",
+      "amu": 132,
+      "sensitivity": 6.494727005032106e-8
+    }
+  ]
+}

@@ -10,21 +10,22 @@ module.exports = function (RED) {
     function PrismaProTestGasClientNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
+
         if (config.client) {
-            createClient(config.client)
+            addClientToNode(config.client)
         }
 
         node.on('input', function (msg) {
-            if (!config.client) {
+            if (!node.config.client) {
                 try {
-                    createClient(msg.testgasMeasurement.config.client)
+                    addClientToNode(msg.testgasMeasurement.config.client)
                 } catch (e) {
                     throw e
                 }
             }
 
             const prismaService = new PrismaService({
-                host: node.config.client.config.host,
+                host: node.config.client.host,
                 timeout: 2500
             })
 
@@ -43,8 +44,9 @@ module.exports = function (RED) {
                     const countOfAmuMeasured = msg.testgasMeasurement.config.recipe.rows.length;
                     const timeoutTime = msg.testgasMeasurement.config.dwellTime * countOfAmuMeasured;
 
+                    msg.testgasMeasurement.result = {};
                     setInterval(async () => {
-                        const lastMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/-1/get");
+                        const lastMeasurementResult = await getLastCompleteMeasurement();
                         msg.testgasMeasurement.result.lastMeasurement = await lastMeasurementResult.json();
 
                         // const completeMeasurementResult = await node.config.client.sendRequest("/mmsp/measurement/scans/get");
@@ -57,25 +59,30 @@ module.exports = function (RED) {
             })();
         });
 
-        function createClient(clientConfig) {
-            const client = RED.nodes.getNode(clientConfig);
+        function addClientToNode(client) {
+            const newClient = RED.nodes.getNode(client);
             node.config = {
-                client
+                client: newClient
             }
         }
 
         async function stopMeasurement() {
             await node.config.client.sendRequest("/mmsp/generalControl/setEmission/set?Off")
-            await node.config.client.sendRequest("/mmsp/generalControl/setEM/set?Off")
+            // await node.config.client.sendRequest("/mmsp/generalControl/setEM/set?Off")
             await node.config.client.sendRequest("/mmsp/scanSetup/scanStop/set?1")
         }
 
         async function startMeasurement(recipeScanSetupTranslator) {
             await recipeScanSetupTranslator.setScanSetup();
+            node.warn(await recipeResponse)
 
             await node.config.client.sendRequest("/mmsp/generalControl/set?setEmission=On");
-            await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
+            // await node.config.client.sendRequest("/mmsp/generalControl/set?setEM=On");
             await node.config.client.sendRequest("/mmsp/scanSetup/set?scanStart=1");
+        }
+
+        async function getLastCompleteMeasurement() {
+            return await node.config.client.sendRequest("/mmsp/measurement/scans/-1/get");
         }
     }
 

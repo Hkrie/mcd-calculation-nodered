@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 module.exports = function (RED) {
     function PrismaProTestGasSetupNode(config) {
         RED.nodes.createNode(this, config);
@@ -6,7 +8,7 @@ module.exports = function (RED) {
         const testGasMixture = JSON.parse(config.testGasMixture);
 
         node.on('input', function (msg) {
-            if (!msg.testgasMeasurement && !msg.testgasMeasurement.config) {
+            if (!(msg.testgasMeasurement && msg.testgasMeasurement.config)) {
                 msg.testgasMeasurement = {};
                 const rows = createRecipeRows(testGasMixture);
 

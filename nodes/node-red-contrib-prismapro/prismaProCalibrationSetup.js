@@ -1,10 +1,12 @@
+const _ = require('lodash');
+
 module.exports = function (RED) {
     function PrismaProCalibrationSetupNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
 
         node.on('input', function (msg) {
-            if (!msg.calibrationMeasurement && !msg.calibrationMeasurement.config) {
+            if (!msg.calibrationMeasurement || !msg.calibrationMeasurement.config) {
                 msg.calibrationMeasurement = {};
                 const calibrationMixture = JSON.parse(config.calibrationMixture);
 
